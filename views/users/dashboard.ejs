@@ -1,0 +1,109 @@
+<% layout("/layouts/boilerplate") %>
+
+    <h1 class="mb-4">
+        🏠 Host Dashboard
+    </h1>
+
+    <div class="row text-center mb-4 g-4">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm p-4">
+
+                <h2>
+                    <%= listings.length %>
+                </h2>
+
+                <p>
+                    My Listings
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm p-4">
+
+                <h2>
+                    <%= bookings.length %>
+                </h2>
+
+                <p>
+                    Total Bookings
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-4">
+
+        <div class="card shadow-sm p-4">
+
+            <h2>
+
+                ₹<%= revenue.toLocaleString("en-IN") %>
+
+            </h2>
+
+            <p>
+
+                Revenue
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <h3 class="mb-3">
+        Recent Reservations
+    </h3>
+
+    <div class="row">
+
+        <% bookings.forEach((booking)=> { %>
+
+            <div class="col-md-4 mb-4">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <img src="<%=booking.listing.images?.[0]?.url %>" class="card-img-top"
+                        style="height:220px; object-fit:cover;">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold">
+                            <%= booking.listing.title %>
+                        </h5>
+
+                        <hr>
+
+                        <p>
+                            📅 Check In:
+                            <%= booking.checkIn.toDateString() %>
+                        </p>
+
+                        <p>
+                            📅 Check Out:
+                            <%= booking.checkOut.toDateString() %>
+                        </p>
+
+                        <p>
+                            👥 Guests:
+                            <%= booking.guests %>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <% }) %>
+
+    </div>

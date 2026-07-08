@@ -1,0 +1,64 @@
+<div class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h1>👤 Host Profile</h1>
+
+        <hr>
+
+        <h3>
+            <%= host.username %>
+        </h3>
+
+        <p>
+            <strong>Email:</strong>
+            <%= host.email %>
+        </p>
+
+        <p>
+            <strong>Total Listings:</strong>
+            <%= listings.length %>
+        </p>
+
+    </div>
+
+    <h3 class="mt-4">
+        🏠 Host Listings
+    </h3>
+
+    <div class="row">
+
+        <% listings.forEach((listing)=> { %>
+
+            <div class="col-md-4 mb-4">
+
+                <div class="card h-100 shadow-sm">
+
+                    <img src="<%= listing.images?.[0]?.url %>" class="card-img-top"
+                        style="height:200px; object-fit:cover;">
+
+                    <div class="card-body">
+
+                        <h5>
+                            <%= listing.title %>
+                        </h5>
+
+                        <p>
+                            ₹<%= listing.price.toLocaleString("en-IN") %>
+                        </p>
+
+                        <a href="/listings/<%= listing._id %>" class="btn btn-dark">
+                            View Listing
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <% }) %>
+
+    </div>
+
+</div>

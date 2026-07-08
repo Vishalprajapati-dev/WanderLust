@@ -1,0 +1,72 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="container mt-4">
+
+        <div class="card shadow p-4">
+
+            <h2>
+                👤 <%= user.username %>
+            </h2>
+
+            <p>
+                <strong>Email:</strong>
+                <%= user.email %>
+            </p>
+
+            <hr>
+
+            <div class="row text-center">
+
+                <div class="col-md-4">
+
+                    <h3>
+                        ❤️
+                    </h3>
+
+                    <h4>
+                        <%= user.wishlist.length %>
+                    </h4>
+
+                    <p>
+                        Wishlist
+                    </p>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <h3>
+                        ✈️
+                    </h3>
+
+                    <h4>
+                        <%= bookings.length %>
+                    </h4>
+
+                    <p>
+                        Trips
+                    </p>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <h3>
+                        🏠
+                    </h3>
+
+                    <h4>
+                        <%= listings.length %>
+                    </h4>
+
+                    <p>
+                        Listings Posted
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>

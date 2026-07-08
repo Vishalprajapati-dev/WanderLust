@@ -1,0 +1,947 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="row mt-3">
+        <div class="col-8 offset-3">
+            <h3>
+                <%= listing.title %>
+            </h3>
+            <% if(listing.averageRating){ %>
+                <p class="fs-5">
+                    ⭐ <strong>
+                        <%= listing.averageRating %>
+                    </strong>
+                    (<%= listing.reviews.length %> reviews)
+                </p>
+                <% } else { %>
+                    <p class="text-muted">
+                        No ratings yet
+                    </p>
+                    <% } %>
+        </div>
+        <div class="card col-6 offset-3 show-card listing-card">
+            <div class="d-flex justify-content-end mb-3">
+
+                <button class="view-photos-btn" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                    📸 View All Photos
+                </button>
+
+            </div>
+            <div class="listing-gallery mb-4">
+
+                <div class="main-image">
+
+                    <img src="<%= listing.images?.[0]?.url || 'https://via.placeholder.com/400x300' %>"
+                        class="card-img-top" alt="listing image">
+
+                </div>
+
+                <div class="side-images">
+
+                    <% for(let i=0; i<4; i++){ %>
+
+                        <div>
+                            <img src="<%= listing.images[0].url %>" alt="">
+                        </div>
+
+                        <% } %>
+
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="host-card mb-4">
+
+                    <div class="host-avatar">
+                        <%= listing.owner.username.charAt(0).toUpperCase() %>
+                    </div>
+
+                    <div class="host-details">
+
+                        <h4 class="mb-2">
+                            Hosted by <%= listing.owner.username %>
+                        </h4>
+
+                        <div class="host-badges">
+
+                            <span class="verified-badge">
+                                ✓ Verified Host
+                            </span>
+
+                            <span class="joined-badge">
+                                Joined
+                                <%= new Date(listing.owner.joinedAt).getFullYear() %>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="host-stats">
+
+                    <div class="host-stat">
+                        <strong>
+                            <%= hostListings %>
+                        </strong>
+                        <span>Listings</span>
+                    </div>
+
+                    <div class="host-stat">
+                        <strong>
+                            <%= hostReviews %>
+                        </strong>
+                        <span>Reviews</span>
+                    </div>
+
+                    <div class="host-stat">
+                        <strong>
+                            100%
+                        </strong>
+                        <span>Response Rate</span>
+                    </div>
+
+                </div>
+
+                <p class="host-description">
+
+                    <strong>
+                        <%= listing.owner.username %>
+                    </strong>
+
+                    has been hosting guests since
+
+                    <%= new Date(listing.owner.joinedAt).getFullYear() %>.
+
+                        Known for quick responses and great hospitality.
+
+                </p>
+                <div class="property-highlights">
+
+                    <h4 class="mb-4">
+                        Property Highlights
+                    </h4>
+
+                    <div class="highlight-grid">
+
+                        <div class="highlight-item" data-bs-toggle="tooltip"
+                            title="You will have the entire place to yourself">
+
+                            🏠 Entire City
+                        </div>
+
+                        <div class="highlight-item" data-bs-toggle="tooltip" title="Maximum 4 guests can stay here">
+
+                            👥 4 Guests
+                        </div>
+
+                        <div class="highlight-item" data-bs-toggle="tooltip" title="Property contains 2 bedrooms">
+
+                            🛏️ 2 Bedrooms
+                        </div>
+
+                        <div class="highlight-item" data-bs-toggle="tooltip" title="Property contains 1 bathroom">
+
+                            🚿 1 Bathrooms
+                        </div>
+
+                        <div class="highlight-item" data-bs-toggle="tooltip"
+                            title="This host consistently receives great reviews">
+
+                            ⭐ Highly Rated Host
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <p class="card-text">
+                    <%= listing.description %>
+                </p>
+                <p class="card-text"> &#x20B9;<%= listing.price.toLocaleString("en-IN")%>
+                </p>
+                <p class="card-text">
+                    <%= listing.location %>
+                </p>
+
+                <p class="card-text">
+                    <%= listing.country %>
+                </p>
+                <p class="card-text">
+                    <%= listing.category %>
+                </p>
+                <% if(currentUser) { %>
+                    <% if(isWishlisted) { %>
+
+                        <div class="d-flex align-items-center gap-2 mb-3">
+
+                            <form action="/listings/<%= listing._id %>/wishlist" method="POST" class="m-0">
+
+                                <button class="btn btn-danger rounded-pill px-4">
+                                    ❤️ Saved
+                                </button>
+
+                            </form>
+
+                            <button class="btn btn-outline-dark rounded-pill" onclick="shareListing()">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+
+                        </div>
+
+                        <% } else { %>
+
+                            <form action="/listings/<%= listing._id %>/wishlist" method="POST">
+
+                                <button class="btn btn-outline-danger mt-3 rounded-pill px-4">
+
+                                    🤍 Save
+
+                                </button>
+
+                            </form>
+
+                            <% } %>
+
+                                <% } %>
+            </div>
+        </div>
+        <div>
+            <% if(currentUser && listing.owner._id.equals(currentUser._id)) { %>
+
+                <div class="btns d-flex gap-3 justify-content-center my-4">
+
+                    <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning">
+                        Edit
+                    </a>
+
+                    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                        <button class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+
+                    <a href="/listings/<%= listing._id %>/reservations" class="btn btn-success">
+                        Reservations
+                    </a>
+
+                </div>
+
+                <% } %>
+        </div>
+
+
+
+        <div class="card p-4 shadow booking-card col-6 offset-3">
+            <h4>Reserve this stay</h4>
+            <form action="/listings/<%= listing._id %>/book" method="POST" id="bookingForm">
+
+                <div class="mb-3">
+                    <label class="form-label">Check In</label>
+
+                    <input type="text" id="checkIn" name="checkIn" class="form-control" placeholder="Select Check In"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Check Out</label>
+
+                    <input type="text" id="checkOut" name="checkOut" class="form-control" placeholder="Select Check Out"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Guests</label>
+
+                    <input type="number" name="guests" min="1" value="1" class="form-control" required>
+                </div>
+
+                <hr>
+                <input type="hidden" id="listingPrice" value="<%= listing.price %>">
+                <input type="hidden" name="totalPrice" id="hiddenTotalPrice" value="24900">
+
+                <div id="priceDetails" class="mb-3">
+
+                    <p>
+                        <strong>Nights:</strong>
+                        <span id="nights">0</span>
+                    </p>
+
+                    <p>
+                        <strong>Total Price:</strong>
+                        ₹<span id="totalPrice">0</span>
+                    </p>
+
+                </div>
+                <input type="hidden" id="bookedDatesData" value='<%- JSON.stringify(bookedDates) %>'>
+
+                <button type="button" id="rzp-button" class="btn btn-danger w-100 booking-btn">
+                    Reserve & Pay
+                </button>
+            </form>
+        </div>
+        <div class="col-6 offset-3 mt-4 mb-4">
+            <h4>Location</h4>
+            <p class="text-muted">
+                <%= listing.location %>, <%= listing.country %>
+            </p>
+            <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(listing.location + ', ' + listing.country) %>"
+                target="_blank" class="btn btn-outline-primary btn-sm mb-3">
+                Open in Google Maps
+            </a>
+            <p class="text-muted mt-2">
+                📍 Latitude:
+                <%= listing.geometry.coordinates[1] %>
+
+                    |
+
+                    Longitude:
+                    <%= listing.geometry.coordinates[0] %>
+            </p>
+            <div id="map"></div>
+        </div>
+        <div class="col-8 offset-3">
+            <div class="amenities-section mt-5">
+
+                <h3 class="mb-4">
+                    What this place offers
+                </h3>
+
+                <div class="row g-3">
+
+                    <% if(listing.amenities && listing.amenities.length> 0){ %>
+
+                        <% listing.amenities.forEach((item)=>{ %>
+
+                            <div class="col-md-6">
+
+                                <div class="amenity-card">
+
+                                    <% if(item==="Wifi" ){ %>
+                                        <i class="fa-solid fa-wifi"></i>
+                                        <% } %>
+
+                                            <% if(item==="Kitchen" ){ %>
+                                                <i class="fa-solid fa-utensils"></i>
+                                                <% } %>
+
+                                                    <% if(item==="Free Parking" ){ %>
+                                                        <i class="fa-solid fa-square-parking"></i>
+                                                        <% } %>
+
+                                                            <% if(item==="TV" ){ %>
+                                                                <i class="fa-solid fa-tv"></i>
+                                                                <% } %>
+
+                                                                    <% if(item==="Air Conditioning" ){ %>
+                                                                        <i class="fa-regular fa-snowflake"></i>
+                                                                        <% } %>
+
+                                                                            <% if(item==="Pool" ){ %>
+                                                                                <i class="fa-solid fa-water-ladder"></i>
+                                                                                <% } %>
+
+                                                                                    <% if(item==="Pets Allowed" ){ %>
+                                                                                        <i class="fa-solid fa-paw"></i>
+                                                                                        <% } %>
+
+                                                                                            <% if(item==="Fireplace" ){
+                                                                                                %>
+                                                                                                <i
+                                                                                                    class="fa-solid fa-fire"></i>
+                                                                                                <% } %>
+
+                                                                                                    <span>
+                                                                                                        <%= item %>
+                                                                                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <% }) %>
+
+                                <% } %>
+
+                </div>
+            </div>
+            <div class="house-rules mt-5">
+                <h3 class="mb-4">
+                    House Rules
+                </h3>
+                <% if(listing.houseRules && listing.houseRules.length> 0){ %>
+
+                    <% listing.houseRules.forEach(rule=> { %>
+
+                        <div class="rule-item">
+
+                            <% if(rule==="No smoking" ){ %>
+                                🚭
+                                <% } %>
+
+                                    <% if(rule==="No parties" ){ %>
+                                        🎉
+                                        <% } %>
+
+                                            <% if(rule==="Pets allowed" ){ %>
+                                                🐶
+                                                <% } %>
+
+                                                    <% if(rule==="Check-in after 2 PM" ){ %>
+                                                        🕑
+                                                        <% } %>
+
+                                                            <%= rule %>
+
+                        </div>
+
+                        <% }) %>
+
+                            <% } else { %>
+
+                                <p class="text-muted">
+
+                                    No house rules specified
+
+                                </p>
+
+                                <% } %>
+
+            </div>
+        </div>
+
+
+        <div class="col-8 offset-3 mb-3">
+            <hr />
+            <% if(currentUser) { %>
+                <h4>Leave a review</h4>
+                <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+                    <!-- <div class="mb-3 mt-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range">
+                </div> -->
+
+                    <div class="mb-3 mt-3">
+                        <label for="rating" class="form-label">Rating</label>
+
+                        <fieldset class="starability-slot">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1"
+                                checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea name="review[comment]" id="review" cols="30" rows="5" class="form-control"
+                            required></textarea>
+                        <div class="invalid-feedback">Please add some comment for reviews</div>
+                        <!-- <div class="invalid-feedback">Please add some comment for review</div> -->
+                    </div>
+                    <button class="btn btn-outline-dark">Submit</button>
+                </form>
+                <hr>
+                <% } %>
+
+                    <p><b>All reviews</b></p>
+                    <div class="row">
+                        <% for(review of listing.reviews) { %>
+                            <div class="card col-5 ms-3 mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">@<%= review.author.username %>
+                                    </h5>
+                                    <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+
+                                    <p class="card-text">
+                                        <%= review.comment %>
+                                    </p>
+
+                                    <form class="mb-3" method="POST"
+                                        action="/listings/<%= listing._id%>/reviews/<%=review._id %>?_method=DELETE">
+                                        <button class="btn btn-sm btn-dark">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
+        </div>
+        <hr>
+
+        <h2 class="mt-5 mb-4">
+            Recently Viewed
+        </h2>
+
+        <div id="recentlyViewedContainer" class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1">
+        </div>
+        <hr class="my-5">
+
+        <h3 class="mb-4">
+            More <%= listing.category %> Stays
+        </h3>
+
+        <div class="row">
+
+            <% similarListings.forEach((item)=>{ %>
+
+                <div class="col-md-3 mb-4">
+
+                    <a href="/listings/<%= item._id %>" class="text-decoration-none text-dark">
+
+                        <div class="card similar-card">
+
+                            <img src="<%= item.images?.[0]?.url || 'https://via.placeholder.com/400x300' %>"
+                                class="card-img-top" alt="listing image">
+
+                            <div class="card-body">
+
+                                <h6 class="fw-bold">
+                                    <%= item.title %>
+                                </h6>
+
+                                <p class="mb-0 text-muted">
+                                    ₹<%= item.price.toLocaleString("en-IN") %>
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+                <% }) %>
+
+        </div>
+        <script>
+            const viewedListing = {
+                _id: "<%= listing._id %>",
+                title: "<%= listing.title %>",
+                image: "<%= listing.images?.[0]?.url || '' %>",
+                price: "<%= listing.price %>"
+            };
+
+            let recentlyViewed =
+                JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+
+            // remove duplicate if already exists
+            recentlyViewed =
+                recentlyViewed.filter(
+                    item => item._id !== viewedListing._id
+                );
+
+            // add newest at beginning
+            recentlyViewed.unshift(viewedListing);
+
+            // keep only last 4
+            recentlyViewed = recentlyViewed.slice(0, 4);
+
+            localStorage.setItem(
+                "recentlyViewed",
+                JSON.stringify(recentlyViewed)
+            );
+        </script>
+        <script>
+            const container =
+                document.getElementById(
+                    "recentlyViewedContainer"
+                );
+
+            if (container) {
+
+                const listings =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "recentlyViewed"
+                        )
+                    ) || [];
+
+                let html = "";
+
+                listings.forEach(item => {
+
+                    if (item._id !== "<%= listing._id %>") {
+
+                        html += `
+            <div class="col mb-4">
+
+                <a
+                  href="/listings/${item._id}"
+                  class="listing-link"
+                >
+
+                    <div class="card col listing-card">
+
+                        <img
+                            src="${item.image}"
+                            class="card-img-top"
+                            style="height:250px"
+                        >
+
+                       <div class="card-body">
+                       <p class="card-text">
+                       <b>${item.title}</b>
+                       <br>
+                       ₹${Number(item.price).toLocaleString("en-IN")}
+                       </p>
+                       </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+            `;
+                    }
+
+                });
+
+                container.innerHTML = html;
+
+            }
+        </script>
+
+        <script>
+            const coordinates = <%- JSON.stringify(listing.geometry?.coordinates || []) %>;
+
+            console.log("Map script loaded");
+            console.log("Coordinates:", coordinates);
+
+            if (coordinates.length >= 2) {
+
+                const map = L.map("map").setView(
+                    [coordinates[1], coordinates[0]],
+                    13
+                );
+
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    {
+                        attribution: "&copy; OpenStreetMap contributors"
+                    }
+                ).addTo(map);
+
+                const customIcon = L.icon({
+                    iconUrl:
+                        "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 40],
+                    popupAnchor: [0, -40]
+                });
+
+                L.marker(
+                    [coordinates[1], coordinates[0]],
+                    { icon: customIcon }
+                )
+                    .addTo(map)
+                    .bindPopup(`
+        <b><%= listing.title %></b><br>
+        <%= listing.location %>, <%= listing.country %>
+    `)
+                    .openPopup();
+            }
+        </script>
+
+        <script>
+
+            const checkIn = document.getElementById("checkIn");
+            const checkOut = document.getElementById("checkOut");
+
+            const nightsSpan = document.getElementById("nights");
+            const totalPriceSpan = document.getElementById("totalPrice");
+
+            const listingPrice =
+                Number(document.getElementById("listingPrice").value);
+
+            function calculatePrice() {
+
+                if (!checkIn.value || !checkOut.value) return;
+
+                const start = new Date(checkIn.value);
+                const end = new Date(checkOut.value);
+
+                const diff =
+                    (end - start) / (1000 * 60 * 60 * 24);
+
+                if (diff > 0) {
+
+                    nightsSpan.textContent = diff;
+
+                    totalPriceSpan.textContent =
+                        (diff * listingPrice).toLocaleString("en-IN");
+                }
+            }
+
+            checkIn.addEventListener("change", calculatePrice);
+            checkOut.addEventListener("change", calculatePrice);
+
+        </script>
+
+        <script>
+
+            const bookedDates = <% - JSON.stringify(bookedDates) %>;
+
+            flatpickr("#checkIn", {
+                dateFormat: "Y-m-d",
+
+                disable: bookedDates,
+
+                minDate: "today"
+            });
+
+            flatpickr("#checkOut", {
+                dateFormat: "Y-m-d",
+
+                disable: bookedDates,
+
+                minDate: "today"
+            });
+
+        </script>
+        <!-- <script>
+
+            const bookedDates = <% - JSON.stringify(bookedDates) %>;
+
+            checkIn.addEventListener(
+                "change",
+                function () {
+
+                    if (
+                        bookedDates.includes(
+                            this.value
+                        )
+                    ) {
+
+                        alert(
+                            "This date is already booked!"
+                        );
+
+                        this.value = "";
+                    }
+                }
+            );
+
+            checkOut.addEventListener(
+                "change",
+                function () {
+
+                    if (
+                        bookedDates.includes(
+                            this.value
+                        )
+                    ) {
+
+                        alert(
+                            "This date is already booked!"
+                        );
+
+                        this.value = "";
+                    }
+                }
+            );
+
+        </script> -->
+
+    </div>
+    <!-- Gallery Modal -->
+
+    <div class="modal fade" id="galleryModal" tabindex="-1">
+
+        <div class="modal-dialog modal-fullscreen">
+
+            <div class="modal-content bg-dark">
+
+                <div class="modal-header border-0">
+
+                    <h5 class="modal-title text-white">
+                        <%= listing.title %>
+                    </h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="airbnb-gallery">
+
+                        <div class="gallery-preview">
+
+                            <img id="previewImage"
+                                src="<%= listing.images && listing.images.length > 0 ? listing.images[0].url : '' %>"
+                                alt="">
+
+                        </div>
+
+                        <div class="gallery-thumbnails">
+
+                            <% if(listing.images && listing.images.length> 0){ %>
+
+                                <% listing.images.forEach((img)=>{ %>
+
+                                    <img src="<%= img.url %>" onclick="changePreview(this.src)">
+
+                                    <% }) %>
+
+                                        <% } %>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+    <script>
+
+        function changePreview(src) {
+
+            document.getElementById("previewImage").src = src;
+
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <input type="hidden" id="bookedDatesData" value='<%- JSON.stringify(bookedDates) %>'>
+    <script src="/js/bookingCalendar.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        async function shareListing() {
+
+            const shareData = {
+
+                title: "<%= listing.title %>",
+
+                text: "Check out this amazing stay on WanderLust!",
+
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+
+                try {
+
+                    await navigator.share(shareData);
+
+                } catch (err) {
+
+                    console.log(err);
+
+                }
+
+            } else {
+
+                navigator.clipboard.writeText(
+                    window.location.href
+                );
+
+                alert(
+                    "🔗 Listing link copied to clipboard!"
+                );
+            }
+        }
+
+    </script>
+
+    <script>
+
+        const tooltipTriggerList =
+            document.querySelectorAll(
+                '[data-bs-toggle="tooltip"]'
+            );
+
+        [...tooltipTriggerList].map(
+            tooltipTriggerEl =>
+                new bootstrap.Tooltip(
+                    tooltipTriggerEl
+                )
+        );
+
+    </script>
+
+    <script>
+
+        document
+            .getElementById("rzp-button")
+            .addEventListener("click", async function () {
+
+                const total =
+                    Number(
+                        document
+                            .getElementById("totalPrice")
+                            .textContent
+                            .replace(/,/g, "")
+                    );
+
+                if (total <= 0) {
+                    alert("Please select valid dates");
+                    return;
+                }
+
+                const response =
+                    await fetch("/payment/create-order", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+
+                        body: JSON.stringify({
+                            amount: total,
+                        }),
+                    });
+
+                const order = await response.json();
+                console.log("Razorpay Key:", "<%= razorpayKey %>");
+                const options = {
+
+                    key: "<%= razorpayKey %>",
+
+                    amount: order.amount,
+
+                    currency: order.currency,
+
+                    name: "WanderLust",
+
+                    description: "Property Reservation",
+
+                    order_id: order.id,
+
+                    handler: function () {
+
+                        document
+                            .getElementById("bookingForm")
+                            .submit();
+                    },
+
+                    theme: {
+                        color: "#ff385c"
+                    }
+                };
+                console.log("Razorpay options:", options);
+                const rzp =
+                    new Razorpay(options);
+                rzp.on("payment.failed", function () {
+
+                    alert("Demo Payment Successful");
+
+                    document.getElementById("bookingForm").submit();
+
+                });
+                rzp.open();
+            });
+
+    </script>

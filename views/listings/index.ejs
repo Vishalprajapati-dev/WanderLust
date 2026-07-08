@@ -1,0 +1,84 @@
+<% layout("/layouts/boilerplate") %>
+
+  <body>
+    <h3>All listings</h3>
+    <form action="/listings" method="GET" class="mb-4">
+
+      <div class="input-group">
+
+        <input type="text" name="search" class="form-control" placeholder="Search city, country, title..."
+          value="<%= search || '' %>">
+        &nbsp; &nbsp;
+        <button class="btn btn-dark" type="submit">
+          Search
+        </button>
+
+      </div>
+
+    </form>
+    <div id="allListingsMap"></div>
+    <div class="filters mb-4">
+
+      <a href="/listings" class="filter-btn">🌍 All</a>
+
+      <a href="/listings?category=Beach" class="filter-btn">
+        🏖 Beach
+      </a>
+
+      <a href="/listings?category=Mountain" class="filter-btn">
+        🏔 Mountain
+      </a>
+
+      <a href="/listings?category=City" class="filter-btn">
+        🏙 City
+      </a>
+
+      <a href="/listings?category=Camping" class="filter-btn">
+        🏕 Camping
+      </a>
+
+      <a href="/listings?category=Historical" class="filter-btn">
+        🏰 Historical
+      </a>
+
+      <a href="/listings?category=Tropical" class="filter-btn">
+        🌴 Tropical
+      </a>
+
+    </div>
+    <!-- <form method="GET" action="listings/new">
+    <button>Create New Listing</button>
+    </form> -->
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+      <% for(let listing of allListings) { %>
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+          <div class="card col listing-card">
+            <img
+              src="<%= listing.images && listing.images.length > 0 ? listing.images[0].url : 'https://via.placeholder.com/400x300' %>"
+              class="card-img-top" alt="listing_image" style="height: 20rem;" />
+            <div class="card-img-overlay"></div>
+            <div class="card-body">
+              <p class="card-text">
+                <b>
+                  <%= listing.title %>
+                </b>
+
+                <span class="float-end">
+                  ⭐
+                  <%= listing.rating ? listing.rating.toFixed(1) : "New" %>
+                </span>
+
+                <br>
+
+                ₹<%= listing.price.toLocaleString("en-IN") %>
+              </p>
+            </div>
+          </div>
+        </a>
+        <%}%>
+    </div>
+    <script>
+      const listings = <% - listingsData %>;
+    </script>
+    <script src="/js/indexMap.js"></script>
+  </body>

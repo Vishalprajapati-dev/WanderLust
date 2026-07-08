@@ -1,0 +1,140 @@
+<% layout("/layouts/boilerplate") %>
+
+    <h2 class="mb-4">
+        Reservations for "<%= listing.title %>"
+    </h2>
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h3>
+                    <%= bookings.length %>
+                </h3>
+                <p class="mb-0">
+                    Total Reservations
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h3>
+                    ₹<%= revenue.toLocaleString("en-IN") %>
+                </h3>
+                <p class="mb-0">
+                    Revenue
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h3>
+                    <%= upcomingBookings %>
+                </h3>
+                <p class="mb-0">
+                    Upcoming
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h3>
+                    <%= completedBookings %>
+                </h3>
+                <p class="mb-0">
+                    Completed
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <% if(bookings.length===0){ %>
+
+        <div class="alert alert-info">
+            No reservations yet.
+        </div>
+
+        <% } else { %>
+
+            <div class="row">
+
+                <% bookings.forEach((booking)=> { %>
+
+                    <div class="col-md-6 mb-4">
+
+                        <div class="card shadow-sm h-100">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    Guest: <%= booking.user.username %>
+                                </h5>
+
+                                <p>
+                                    <strong>Check In:</strong>
+                                    <%= booking.checkIn.toDateString() %>
+                                </p>
+
+                                <p>
+                                    <strong>Check Out:</strong>
+                                    <%= booking.checkOut.toDateString() %>
+                                </p>
+
+                                <p>
+                                    <strong>Guests:</strong>
+                                    <%= booking.guests %>
+                                </p>
+
+                                <p>
+                                    <strong>Email:</strong>
+                                    <%= booking.user.email %>
+                                </p>
+
+                                <% const today=new Date(); let bookingStatus="" ; if (new Date(booking.checkIn)> today)
+                                    {
+
+                                    bookingStatus = "Upcoming";
+
+                                    } else if (
+                                    new Date(booking.checkOut) < today ) { bookingStatus="Completed" ; } else {
+                                        bookingStatus="Ongoing" ; } %>
+
+                                        <p>
+                                            <strong>Status:</strong>
+
+                                            <% if(bookingStatus==="Upcoming" ){ %>
+
+                                                <span class="badge bg-warning text-dark">
+                                                    Upcoming
+                                                </span>
+
+                                                <% } else if(bookingStatus==="Ongoing" ){ %>
+
+                                                    <span class="badge bg-success">
+                                                        Ongoing
+                                                    </span>
+
+                                                    <% } else { %>
+
+                                                        <span class="badge bg-secondary">
+                                                            Completed
+                                                        </span>
+
+                                                        <% } %>
+                                        </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <% }) %>
+
+            </div>
+
+            <% } %>

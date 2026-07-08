@@ -1,0 +1,155 @@
+<% layout("/layouts/boilerplate") %>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <!-- <br><br> -->
+            <h3>Create a New Listing</h3>
+            <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input name="listing[title]" placeholder="Add a catchy title" type="text" class="form-control"
+                        required>
+                    <div class="valid-feedback">Title looks good!</div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]" class="form-control" required></textarea>
+                    <div class="invalid-feedback">Please enter a short description</div>
+
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Listing Image</label>
+                    <input name="listing[images]" type="file" class="form-control" multiple required />
+                    <div class="invalid-feedback">
+                        Please upload an image
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="mb-3 col-md-4">
+                        <label for="price" class="form-label">Price</label>
+                        <input name="listing[price]" placeholder="1200" class="form-control" required />
+                        <div class="invalid-feedback">Price should be valid</div>
+
+                    </div>
+
+                    <div class="mb-3 col-md-8">
+                        <label for="country" class="form-label">Country</label>
+                        <input name="listing[country]" placeholder="India" type="text" class="form-control" required />
+                        <div class="invalid-feedback">Country name should be valid</div>
+
+                        <br>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input id="location" name="listing[location]" placeholder="Search city..." type="text"
+                        class="form-control" autocomplete="off" required />
+
+                    <div id="suggestions" class="list-group"></div>
+                    <div id="preview-map" class="mt-3"></div>
+                    <div class="invalid-feedback">Location should be valid</div>
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+
+                    <select name="listing[category]" class="form-select" required>
+                        <option value="Beach">🏖 Beach</option>
+                        <option value="Mountain">🏔 Mountain</option>
+                        <option value="City" selected>🏙 City</option>
+                        <option value="Camping">🏕 Camping</option>
+                        <option value="Historical">🏰 Historical</option>
+                        <option value="Tropical">🌴 Tropical</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">
+                        Amenities
+                    </label>
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Wifi">
+                            Wifi
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Kitchen">
+                            Kitchen
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Free Parking">
+                            Free Parking
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="TV">
+                            TV
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Air Conditioning">
+                            Air Conditioning
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Pool">
+                            Pool
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Pets Allowed">
+                            Pets Allowed
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="checkbox" name="listing[amenities]" value="Fireplace">
+                            Fireplace
+                        </div>
+                    </div>
+                </div>
+                <h5 class="mt-4">
+                    House Rules
+                </h5>
+
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <input type="checkbox" name="listing[houseRules]" value="Check-in after 2 PM">
+
+                        Check-in after 2 PM
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="checkbox" name="listing[houseRules]" value="No smoking">
+
+                        No smoking
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="checkbox" name="listing[houseRules]" value="No parties">
+
+                        No parties
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="checkbox" name="listing[houseRules]" value="Pets allowed">
+
+                        Pets allowed
+                    </div>
+
+                </div>
+                <button class="btn btn-dark add-btn mt-3">Add</button>
+                <br><br>
+            </form>
+            <script src="/js/locationSearch.js"></script>
+        </div>
+    </div>

@@ -1,0 +1,61 @@
+<% layout("/layouts/boilerplate") %>
+
+<h2 class="mb-4">❤️ My Wishlist</h2>
+
+<% if(wishlist.length > 0){ %>
+
+<div class="row g-4">
+
+    <% for(let listing of wishlist){ %>
+
+    <div class="col-lg-4 col-md-6">
+
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+
+            <div class="card listing-card h-100">
+
+                <img
+                    src="<%= listing.images?.[0]?.url || 'https://via.placeholder.com/400x300' %>"
+                    class="card-img-top wishlist-img">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        <%= listing.title %>
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        ₹<%= listing.price.toLocaleString("en-IN") %> / night
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    <% } %>
+
+</div>
+
+<% } else { %>
+
+<div class="text-center py-5">
+
+    <h1>❤️</h1>
+
+    <h3>No properties saved yet</h3>
+
+    <p class="text-muted">
+        Start exploring amazing stays.
+    </p>
+
+    <a href="/listings" class="btn btn-dark">
+        Explore Listings
+    </a>
+
+</div>
+
+<% } %>

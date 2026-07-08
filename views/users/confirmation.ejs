@@ -1,0 +1,105 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 p-5 text-center">
+
+        <div style="font-size:70px;">
+            🎉
+        </div>
+
+        <h1 class="fw-bold mt-3">
+            Booking Confirmed!
+        </h1>
+
+        <p class="text-muted">
+            Your stay has been successfully reserved.
+        </p>
+
+        <hr>
+
+        <div class="row text-start mt-4">
+
+            <div class="col-md-6">
+
+                <h5 class="fw-bold">
+                    Property
+                </h5>
+
+                <p>
+                    <%= booking.listing.title %>
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h5 class="fw-bold">
+                    Booking ID
+                </h5>
+
+                <p>
+                    #<%= booking._id.toString().slice(-6).toUpperCase() %>
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h5 class="fw-bold">
+                    Check-In
+                </h5>
+
+                <p>
+                    <%= booking.checkIn.toDateString() %>
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h5 class="fw-bold">
+                    Check-Out
+                </h5>
+
+                <p>
+                    <%= booking.checkOut.toDateString() %>
+                </p>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h5 class="fw-bold">
+                    Guests
+                </h5>
+
+                <p>
+                    <%= booking.guests %>
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+
+            <a href="/trips"
+                class="btn btn-danger me-2">
+
+                View My Trips
+
+            </a>
+
+            <a href="/listings"
+                class="btn btn-outline-dark">
+
+                Explore More Stays
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
